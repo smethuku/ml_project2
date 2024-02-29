@@ -48,3 +48,49 @@ DEALLOCATE cursor_name;
 
 -- Now, @tbl_output should contain the parsed data
 SELECT * FROM @tbl_output;
+
+
+
+ 
+Node,Message,TimeGenerated 
+Node1,Cluster resource 'Cluster IP Address 00.00.00.0' of type 'IP Address' in clustered role 'Cluster Group' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240229153752.663279-000 
+Node1,Cluster resource 'Cluster IP Address 00.00.00.0' of type 'IP Address' in clustered role 'Cluster Group' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240229013651.761247-000 
+Node1,Cluster resource 'Cluster IP Address 00.00.00.0' of type 'IP Address' in clustered role 'Cluster Group' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240228231111.229901-000 
+Node1,Cluster resource 'ASTAG-SQL910AT_10.27.41.241' of type 'IP Address' in clustered role 'ASTAG-SQL910AT' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240220140651.034371-000 
+Node1,Cluster resource 'ASTAG-SQL910AT_10.27.41.241' of type 'IP Address' in clustered role 'ASTAG-SQL910AT' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240220140645.800692-000 
+Node1,Cluster resource 'Cluster IP Address 00.00.00.0' of type 'IP Address' in clustered role 'Cluster Group' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240216014123.033565-000 
+Node1,Cluster resource 'ASTAG-SQL910AT_10.27.41.241' of type 'IP Address' in clustered role 'ASTAG-SQL910AT' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240216012855.980842-000 
+Node1,Cluster resource 'ASTAG-SQL910AT_10.27.41.241' of type 'IP Address' in clustered role 'ASTAG-SQL910AT' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240216012845.438566-000 
+Node1,Cluster resource 'File Share Witness' of type 'File Share Witness' in clustered role 'Cluster Group' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240213022930.346149-000 
+Node1,Cluster resource 'File Share Witness' of type 'File Share Witness' in clustered role 'Cluster Group' failed. 
+ 
+Based on the failure policies for the resource and role, the cluster service may try to bring the resource online on this node or move the group to another node of the cluster and then restart it.  Check the resource and group state using Failover Cluster
+ Manager or the Get-ClusterResource Windows PowerShell cmdlet.,20240213021530.113581-000 
+NULL
