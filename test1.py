@@ -63,4 +63,50 @@ Based on the failure policies for the resource and role, the cluster service may
 TimeGenerated=20240229153752.663279-000
 
 
+DECLARE @currentText NVARCHAR(MAX);
+DECLARE @TimeGeneratedString NVARCHAR(50);
+DECLARE @TimeGenerated DATETIME2;
+
+-- Cursor declaration
+DECLARE text_cursor CURSOR FOR 
+SELECT TextInput FROM InputTexts;
+
+-- Open the cursor
+OPEN text_cursor;
+
+-- Fetch from the cursor
+FETCH NEXT FROM text_cursor INTO @currentText;
+
+-- Loop through the cursor
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Extract TimeGenerated
+    DECLARE @StartIndex INT = CHARINDEX('TimeGenerated=', @currentText) + 14;
+    SET @TimeGeneratedString = SUBSTRING(@currentText, @StartIndex, 20); -- Assuming fixed length for TimeGenerated
+
+    -- Convert TimeGeneratedString to DATETIME2
+    -- Assuming the format is YYYYMMDDHHMMSS.ffffff
+    SET @TimeGenerated = CAST(SUBSTRING(@TimeGeneratedString, 1, 4) + '-' +
+                              SUBSTRING(@TimeGeneratedString, 5, 2) + '-' +
+                              SUBSTRING(@TimeGeneratedString, 7, 2) + 'T' +
+                              SUBSTRING(@TimeGeneratedString, 9, 2) + ':' +
+                              SUBSTRING(@TimeGeneratedString, 11, 2) + ':' +
+                              SUBSTRING(@TimeGeneratedString, 13, 2) + '.' +
+                              SUBSTRING(@TimeGeneratedString, 16, 6) AS DATETIME2);
+
+    -- Insert TimeGenerated into the temp table
+    INSERT INTO #TimeGeneratedValues (TimeGenerated)
+    VALUES (@TimeGenerated);
+
+    -- Fetch next from the cursor
+    FETCH NEXT FROM text_cursor INTO @currentText;
+END
+
+-- Close and deallocate the cursor
+CLOSE text_cursor;
+DEALLOCATE text_cursor;
+
+-- Verify the contents of the temp table
+SELECT * FROM #TimeGeneratedValues;
+
 
