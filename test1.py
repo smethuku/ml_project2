@@ -110,3 +110,35 @@ DEALLOCATE text_cursor;
 SELECT * FROM #TimeGeneratedValues;
 
 
+# Define the timeframe to check for recent events (e.g., last 5 minutes)
+$timeframe = (Get-Date).AddMinutes(-5)
+
+# Event ID to monitor
+$eventID = 1069
+
+# Query the event log
+$events = Get-WinEvent -FilterHashtable @{
+    LogName = 'System'; 
+    ID = $eventID; 
+    StartTime = $timeframe
+} -ErrorAction SilentlyContinue
+
+if ($events) {
+    # Event details to include in the alert
+    $eventDetails = $events | ForEach-Object {
+        "Time: $($_.TimeCreated); ID: $($_.Id); Message: $($_.Message)"
+    } -join "`n"
+
+    # Send an email alert (example using Send-MailMessage)
+    $mailParams = @{
+        SmtpServer = 'smtp.example.com' # SMTP server
+        From = 'alerts@example.com' # Sender address
+        To = 'admin@example.com' # Recipient address
+        Subject = "Failover Cluster Alert: Event $eventID Detected"
+        Body = "The following failover cluster events were detected:`n`n$eventDetails"
+    }
+    Send-MailMessage @mailParams
+} else {
+    Write-Host "No recent failover cluster events detected."
+}
+
