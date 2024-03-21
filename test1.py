@@ -5,3 +5,12 @@
 3. Snowflake offering: 
 
 4. Research and Learn various Machine Learning architectures and implementations.
+
+
+  Question
+What are the desired outcomes of your work? What are you expected to deliver and in what way? What specifics is your manager anticipating from you? Consider:
+
+Timeliness and quality of work
+Departmental attributes
+Collaboration and respect
+Decision-making and judgement
