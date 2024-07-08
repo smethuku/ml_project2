@@ -33,3 +33,16 @@ Architected and implemented Snowflake Security alerts using python
 Learn AI/ML technologies: I am actively researching a learning various ML models, and their implementation. I am looking forward to gain more knowledge in this area, and as I explore I am also looking to identify how we can use ML technologies at our company.
 
 SSAS: As we prioritized Snowflake offering, I did not make any further progress in SSAS implementation.
+
+
+Learns and Applies:
+•	Continuous Learning: By staying updated with the latest in database technologies, Powershell, Python, SSAS and Snowflake innovations. This learning directly applies to enhancing and expanding the capabilities within each priority area.
+•	Application of Knowledge: By actively applying new insights and technologies to improve various automation processes, enrich the SSAS offering, and optimize the Snowflake environment will help me demonstrate my ability not just learn but effectively implement improvements.
+ 
+Solves Collaboratively:
+•	Cross-Functional Teamwork: By collaborating with other departments and teams, especially when integrating Snowflake, SSAS or SQL Server database solutions into broader business processes. Effective problem-solving in these area often requires input from various stakeholders to ensure solutions are comprehensive and aligned with business needs.
+Skill and Knowledge:
+•	I will be attaining deep technical expertise in automation, database management, SSAS, Snowflake's unique cloud data warehouse capabilities and AI/ML technologies. This includes understanding the architectural, operational and optimization aspects of each priority.
+Takes Accountability:
+•	By taking full accountability, I will ensure the success of initiatives within the Database automation, SSAS, and Snowflake offerings. It means pushing for excellence and being responsible for outcomes, learning from setbacks and celebrating successes.
+
