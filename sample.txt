@@ -1,0 +1,35 @@
+Answer
+1. Automation of Database Operations: I will be prioritizing the development and implementation of automation around the gaps identified in the current automation implementation and operational SRE queue. Focus on areas where manual processes are still prevalent, and assess the potential for automation to improve efficiency and reduce errors. I want to adopt a continuous improvement mindset by regularly reviewing and updating the automation process.
+
+2. SSAS offering: I will be focusing on the ongoing enhancement of our SSAS offering, with an emphasis on ensuring the comprehensive completion of its remaining elements. These elements span the entire lifecycle, from provisioning to decommissioning, and include vital areas such as resiliency, high availability and disaster recovery, security, enhancing monitoring capabilities.
+Furthermore, I recognize the power of collaboration in driving innovation and excellence. Therefore, I will be collaborating with other departments, as it will provide additional insights and may reveal opportunities for further enhancing the SSAS offering.
+ 
+3. Snowflake offering: As we continue to expand our database services offerings, with Snowflake being our newest offering, I will be collaborating with the team in designing and implementation of the complete offering which includes resiliency, warehouse management, security, user and role configurations, data integration, monitoring and alerting.
+Additionally I will provide ongoing support to teams as they onboard and adapt to the Snowflake platform. This involves facilitating a smooth transition, addressing technical challenges, and ensuring the teams can leverage Snowflake's capabilities to their full potential.
+
+4. Learn AI/ML technologies: I want to establish a strong foundational understanding on AI/ML principles, technologies and their applications in various industries. This includes engaging with online courses, webinars and relevant literature to build a comprehensive knowledge base.
+All the above priorities and expectations will directly contribute to Dimensional's strategic goals, such as improving operational efficiency, enabling data-driven decision-making, ensuring data security and compliance, fostering a culture of learning and collaboration.
+
+
+
+
+
+Question
+Evaluate progress on your work (e.g. projects, deliverables, assignments etc.) and your development (e.g. attributes, skills, behaviors etc.). Compare what you have done with what you set out to do.  
+For example, consider evaluating criteria such as: 
+•	Output quality or punctuality
+•	Demonstration of effort or judgement
+•	Collaboration and interpersonal effectiveness 
+Employee Evaluation
+
+Automation of Database Operations:
+Automated SQL Server Job owners alert and resolved existing jobs that are not owned by sa.
+Implemented TempDB version store usage alert, this enables us to proactively monitor tempdb version store usage when RCSI is enabled
+
+Snowflake Offering:
+Collaborating with GDS team members and actively working on EDW Phase 1 implementation. I am part of the EDW-Security and EDW-Monitoring and Observability teams. As part of these 2 teams, I am actively researching and implementing solutions to contribute to the overall snowflake offering.
+Architected and implemented Snowflake Security alerts using python
+
+Learn AI/ML technologies: I am actively researching a learning various ML models, and their implementation. I am looking forward to gain more knowledge in this area, and as I explore I am also looking to identify how we can use ML technologies at our company.
+
+SSAS: As we prioritized Snowflake offering, I did not make any further progress in SSAS implementation.
