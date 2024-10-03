@@ -1,0 +1,77 @@
+Slide 1: Title Slide
+
+Title: Introducing the New SSAS Security Model
+Subtitle: Enhancing Access Control and Management Efficiency
+Presented by: [Your Name]
+Date: [Presentation Date]
+
+Slide 2: Agenda
+
+	•	Current Security Model Overview
+	•	Challenges with the Existing Model
+	•	The Proposed New Security Model
+	•	Key Benefits of the New Model
+	•	Migration Plan
+	•	Next Steps and Questions
+
+Slide 3: Current Security Model Overview
+
+	•	Direct User Mapping to Roles
+	•	AD users directly assigned to SSAS database roles.
+	•	Roles are manually created in the SSAS database for specific access (Read, Write, Process, Admin).
+	•	User management is done at the database level.
+
+Slide 4: Challenges with the Current Model
+
+	•	High Maintenance:
+	•	Manual user-role management leads to increased administrative effort.
+	•	Direct mapping of users to roles lacks scalability.
+	•	Lack of Role-Based Grouping:
+	•	No centralized grouping for roles, leading to inconsistency.
+	•	Onboarding Complexity:
+	•	Adding a new user requires multiple steps, making it slow and prone to errors.
+
+Slide 5: The New Security Model - Overview
+
+	•	Standardized Role Creation in SSAS:
+	•	Creation of SSAS roles for Read, Process, Write, and Admin.
+	•	Active Directory Integration:
+	•	AD groups created with a standardized naming convention:
+businessname_databasename_cubename_read/write/process/admin.
+	•	User Management via AD Groups:
+	•	Existing users migrated to AD groups, future users are added to appropriate AD groups.
+	•	Eliminates direct user-role mapping in SSAS.
+
+Slide 6: Benefits of the New Model
+
+	•	Streamlined User Management:
+	•	Centralized control of user access through AD groups.
+	•	Easier onboarding and offboarding with reduced admin overhead.
+	•	Scalability:
+	•	Simplified role management for future databases and cubes.
+	•	Easy to replicate and apply the model across different business areas.
+	•	Consistency and Security:
+	•	Standard naming conventions for AD groups.
+	•	Clear separation of duties across Read, Write, Process, and Admin roles.
+
+Slide 7: Migration Plan
+
+	•	Step 1: Inventory of existing users and roles in SSAS.
+	•	Step 2: Creation of AD groups following the standard naming convention.
+	•	Step 3: Mapping existing users to new AD groups based on current roles.
+	•	Step 4: Testing of new security model with a subset of users.
+	•	Step 5: Full migration of all users to AD groups.
+	•	Step 6: Decommission direct user-role mapping in SSAS.
+
+Slide 8: Next Steps
+
+	•	Implement New Model:
+	•	Begin with a pilot phase for one cube or database.
+	•	Monitor and Adjust:
+	•	Collect feedback and adjust the model as needed.
+	•	Full Rollout:
+	•	Plan for company-wide implementation once the pilot phase is successful.
+
+Slide 9: Questions and Discussion
+
+	•	Open the floor for questions, feedback, and concerns from the team.
