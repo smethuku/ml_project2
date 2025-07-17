@@ -1,0 +1,16 @@
+Step 1:
+ Get the restore start time and sql_text from SYS.dm_exec_requests r
+CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) AS st
+WHERE r.COMMAND = 'RESTORE DATABASE'
+
+Step 2: filter for the database name from the sql_text and get the restore start time and sql_text
+
+Step 3: Get the count of the Transaction Log Backups from the sql_text, we can filter and count the number of times "RESTORE LOG" is in sql_text 
+
+Step 3: 
+ In a while loop
+	1. check if the database is still in restoring mode - use SMO for this
+	2. Check if there are any entries in msdb.dbo.restorehistory after the restore start time
+	3. Show the current restore type (it could be FULL or Transactoin Log), percentage of the restore.
+			When showing the Transaction Log Percentage, you can refer to the count and the number of entries in msdb.dbo.restorehistory, to figure out which tlog is getting restored
+if the database is online, exit the while loop, and report the last tlog restore datetime
