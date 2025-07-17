@@ -1,112 +1,128 @@
-function Monitor-RestoreProgress {
-    param (
-        [string]$ServerName,
-        [string]$DatabaseName
-    )
+param (
+    [string]$ServerName,
+    [string]$DatabaseName
+)
 
-    Write-Host "`n--- Starting Restore Monitor ---`n"
+Import-Module SqlServer -ErrorAction Stop
 
-    # Step 1: Get the restore start time and sql_text for RESTORE DATABASE
-    $restoreQuery = @"
+# Connect using SMO
+try {
+    $smoServer = New-Object Microsoft.SqlServer.Management.Smo.Server $ServerName
+} catch {
+    Write-Error "Failed to connect to SQL Server via SMO. $_"
+    return
+}
+
+# Step 1: Get restore start time and sql_text
+$restoreQuery = @"
 SELECT 
+    r.session_id,
+    r.command,
+    r.percent_complete,
     r.start_time,
     st.text AS sql_text
 FROM sys.dm_exec_requests r
-CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) AS st
+CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) st
 WHERE r.command = 'RESTORE DATABASE'
 "@
 
-    $restoreInfo = Invoke-Sqlcmd -ServerInstance $ServerName -Query $restoreQuery
+try {
+    $restoreRequests = Invoke-Sqlcmd -ServerInstance $ServerName -Query $restoreQuery -ErrorAction Stop
+} catch {
+    Write-Error "Failed to retrieve restore information. $_"
+    return
+}
 
-    if (!$restoreInfo) {
-        Write-Host "No RESTORE DATABASE operation found currently running."
-        return
-    }
+# Step 2: Filter by database name in SQL text
+$matchedRestore = $restoreRequests | Where-Object { $_.sql_text -match "(?i)\b$DatabaseName\b" }
 
-    # Step 2: Filter by database name
-    $matchingRow = $restoreInfo | Where-Object { $_.sql_text -match "(?i)$DatabaseName" }
+if (-not $matchedRestore) {
+    Write-Output "No active RESTORE DATABASE command found for $DatabaseName."
+    return
+}
 
-    if (!$matchingRow) {
-        Write-Host "No restore found for database [$DatabaseName]."
-        return
-    }
+$sqlText = $matchedRestore.sql_text
+$restoreStartTime = Get-Date $matchedRestore.start_time
 
-    $restoreStartTime = $matchingRow.start_time
-    $sqlText = $matchingRow.sql_text
+# Step 3: Count number of transaction logs to restore
+$logRestoreCount = ([regex]::Matches($sqlText, "(?i)RESTORE LOG")).Count
 
-    # Step 3: Count RESTORE LOG statements
-    $logCount = ([regex]::Matches($sqlText, "(?i)RESTORE\s+LOG")).Count
-    Write-Host "Restore started at: $restoreStartTime"
-    Write-Host "Total Transaction Logs to restore: $logCount"
+Write-Output "Restore started at: $restoreStartTime"
+Write-Output "Transaction Log Backups to be restored: $logRestoreCount"
 
-    # Loop until database is online
-    $server = New-Object Microsoft.SqlServer.Management.Smo.Server $ServerName
-    $lastTlogTime = $null
+# Step 4: Monitor progress in loop
+$logRestoresCompleted = 0
+$lastRestoreTime = $null
 
-    while ($true) {
-        $db = $server.Databases[$DatabaseName]
-        
-        if ($db -and $db.Status -eq "Normal") {
-            Write-Host "`nDatabase [$DatabaseName] is now ONLINE."
-            break
+while ($true) {
+    $db = $smoServer.Databases[$DatabaseName]
+    $status = if ($db) { $db.Status.ToString() } else { "Not Yet Created" }
+
+    # Check if DB is online
+    if ($status -eq "Normal") {
+        Write-Output "Database [$DatabaseName] is now ONLINE."
+        if ($lastRestoreTime) {
+            Write-Output "Last transaction log restore completed at: $lastRestoreTime"
         }
+        break
+    }
 
-        # Step 4: Check msdb.dbo.restorehistory entries after restoreStartTime
-        $historyQuery = @"
-SELECT restore_date, restore_type
+    # Query msdb.dbo.restorehistory for completed restores
+    $historyQuery = @"
+SELECT 
+    restore_date,
+    restore_type,
+    backup_set_id,
+    [user_name]
 FROM msdb.dbo.restorehistory
 WHERE destination_database_name = '$DatabaseName'
-AND restore_date >= '$restoreStartTime'
+AND restore_date >= '$($restoreStartTime.ToString("yyyy-MM-dd HH:mm:ss"))'
 ORDER BY restore_date ASC
 "@
 
-        $history = Invoke-Sqlcmd -ServerInstance $ServerName -Query $historyQuery
+    $restoreHistory = Invoke-Sqlcmd -ServerInstance $ServerName -Query $historyQuery
 
-        $logRestores = $history | Where-Object { $_.restore_type -eq 'L' }
-        $numRestoredLogs = $logRestores.Count
-        $lastTlogTime = if ($numRestoredLogs -gt 0) { $logRestores[-1].restore_date } else { $null }
+    # Determine current restore phase
+    $completedCount = $restoreHistory.Count
+    $lastRestore = $restoreHistory | Select-Object -Last 1
+    $lastRestoreTime = $lastRestore.restore_date
 
-        # Step 5: Check for active restore command
-        $progressQuery = @"
-SELECT r.command, r.percent_complete, r.start_time,
-       st.text AS sql_text
+    $currentRestoreQuery = @"
+SELECT 
+    r.command,
+    r.percent_complete,
+    st.text AS sql_text
 FROM sys.dm_exec_requests r
 CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) st
 WHERE r.command LIKE 'RESTORE%'
 "@
 
-        $progressInfo = Invoke-Sqlcmd -ServerInstance $ServerName -Query $progressQuery
-        $currentRow = $progressInfo | Where-Object { $_.sql_text -match "(?i)$DatabaseName" }
+    $currentRestore = Invoke-Sqlcmd -ServerInstance $ServerName -Query $currentRestoreQuery |
+                      Where-Object { $_.sql_text -match "(?i)\b$DatabaseName\b" }
 
-        if ($currentRow) {
-            $percent = [math]::Round($currentRow.percent_complete, 2)
-            $cmd = $currentRow.command
-            $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    if ($currentRestore) {
+        $command = $currentRestore.command
+        $percent = [math]::Round($currentRestore.percent_complete, 2)
 
-            if ($cmd -eq "RESTORE DATABASE") {
-                if ($currentRow.sql_text -match "(?i)DIFFERENTIAL") {
-                    Write-Host "[$timestamp] Restoring Differential Backup - $percent% Completed"
-                } else {
-                    Write-Host "[$timestamp] Restoring Full Backup - $percent% Completed"
-                }
-            } elseif ($cmd -eq "RESTORE LOG") {
-                $logIndex = $numRestoredLogs + 1
-                Write-Host "[$timestamp] Restoring $logIndex of $logCount Transaction Log - $percent% Completed"
+        if ($command -eq "RESTORE DATABASE") {
+            if ($completedCount -eq 0) {
+                Write-Output "Restoring FULL backup now... $percent% complete"
+            } elseif ($completedCount -eq 1 -and $restoreHistory[0].restore_type -eq 'D') {
+                Write-Output "Restoring DIFFERENTIAL backup now... $percent% complete"
             } else {
-                Write-Host "[$timestamp] Command: $cmd - $percent% Completed"
+                Write-Output "Restoring additional DATABASE restore (possible DIFF)... $percent% complete"
             }
-        } else {
-            Write-Host "$(Get-Date -Format "yyyy-MM-dd HH:mm:ss") Waiting for next restore command..."
         }
-
-        Start-Sleep -Seconds 5
-    }
-
-    if ($lastTlogTime) {
-        Write-Host "Last TLOG Restore completed at: $lastTlogTime"
+        elseif ($command -eq "RESTORE LOG") {
+            $logNumber = $restoreHistory | Where-Object { $_.restore_type -eq 'L' } | Measure-Object | Select-Object -ExpandProperty Count
+            $logNumber += 1
+            Write-Output "Restoring $logNumber of $logRestoreCount Transaction Log backups... $percent% complete"
+        } else {
+            Write-Output "Restore in progress: $command - $percent% complete"
+        }
     } else {
-        Write-Host "No Transaction Log restore found in history."
+        Write-Output "Waiting for next restore to start..."
     }
 
-    Write-Host "`n--- Restore Monitor Complete ---`n"
+    Start-Sleep -Seconds 5
 }
