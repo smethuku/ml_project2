@@ -1,0 +1,126 @@
+function set-databaseobjecttext {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)][string]$ServerName,
+        [Parameter(Mandatory = $true)][string]$DatabaseName,
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('StoredProcedure', 'Function', 'View', 'All')]
+        [string]$ObjectType,
+        [Parameter(Mandatory = $true)][string]$SourceSqlText,
+        [Parameter(Mandatory = $true)][string]$ReplaceSqlText,
+        [int]$ThrottleLimit = 10
+    )
+
+    try {
+        Import-Module SqlServer -ErrorAction Stop
+    } catch {
+        Write-Error "SqlServer module is required. Run 'Install-Module SqlServer'"
+        return
+    }
+
+    $server = New-Object Microsoft.SqlServer.Management.Smo.Server $ServerName
+    $db = $server.Databases[$DatabaseName]
+    if (-not $db) {
+        Write-Error "Database '$DatabaseName' not found on server '$ServerName'"
+        return
+    }
+
+    $typesToProcess = switch ($ObjectType) {
+        'StoredProcedure' { @('StoredProcedure') }
+        'Function'        { @('Function') }
+        'View'            { @('View') }
+        'All'             { @('StoredProcedure','Function','View') }
+    }
+
+    $allObjects = @()
+    foreach ($type in $typesToProcess) {
+        switch ($type) {
+            'StoredProcedure' {
+                $allObjects += $db.StoredProcedures | Where-Object { -not $_.IsSystemObject } | ForEach-Object {
+                    [PSCustomObject]@{
+                        Schema     = $_.Schema
+                        Name       = $_.Name
+                        Type       = 'StoredProcedure'
+                        SqlType    = 'PROCEDURE'
+                        Definition = $_.TextHeader + "`n" + $_.TextBody
+                    }
+                }
+            }
+            'Function' {
+                $allObjects += $db.UserDefinedFunctions | Where-Object { -not $_.IsSystemObject } | ForEach-Object {
+                    [PSCustomObject]@{
+                        Schema     = $_.Schema
+                        Name       = $_.Name
+                        Type       = 'Function'
+                        SqlType    = 'FUNCTION'
+                        Definition = $_.TextHeader + "`n" + $_.TextBody
+                    }
+                }
+            }
+            'View' {
+                $allObjects += $db.Views | Where-Object { -not $_.IsSystemObject } | ForEach-Object {
+                    [PSCustomObject]@{
+                        Schema     = $_.Schema
+                        Name       = $_.Name
+                        Type       = 'View'
+                        SqlType    = 'VIEW'
+                        Definition = $_.TextHeader + "`n" + $_.TextBody
+                    }
+                }
+            }
+        }
+    }
+
+    # Shared collection to gather results from all parallel tasks
+    $results = [System.Collections.Concurrent.ConcurrentBag[object]]::new()
+
+    $allObjects | ForEach-Object -Parallel {
+        param (
+            $ServerName, $DatabaseName, $SourceSqlText, $ReplaceSqlText, $results
+        )
+
+        Import-Module SqlServer -DisableNameChecking
+
+        $server = New-Object Microsoft.SqlServer.Management.Smo.Server $ServerName
+        $db = $server.Databases[$DatabaseName]
+
+        $schema = $_.Schema
+        $name = $_.Name
+        $type = $_.Type
+        $sqlType = $_.SqlType
+        $definition = $_.Definition
+
+        if ($definition -like "*$SourceSqlText*") {
+            $updatedDefinition = $definition -replace [regex]::Escape($SourceSqlText), $ReplaceSqlText
+            $alteredText = $updatedDefinition -replace "(?i)CREATE\s+$sqlType", "ALTER $sqlType"
+
+            try {
+                $db.ExecuteNonQuery($alteredText)
+                $results.Add([PSCustomObject]@{
+                    Type = $type
+                    Schema = $schema
+                    Name = $name
+                    Status = "Updated"
+                })
+            } catch {
+                $results.Add([PSCustomObject]@{
+                    Type = $type
+                    Schema = $schema
+                    Name = $name
+                    Status = "Failed: $_"
+                })
+            }
+        }
+    } -ArgumentList $ServerName, $DatabaseName, $SourceSqlText, $ReplaceSqlText, $results -ThrottleLimit $ThrottleLimit
+
+    # Format output
+    $storedProcedures = $results | Where-Object { $_.Type -eq 'StoredProcedure' -and $_.Status -eq 'Updated' }
+    $views            = $results | Where-Object { $_.Type -eq 'View' -and $_.Status -eq 'Updated' }
+    $functions        = $results | Where-Object { $_.Type -eq 'Function' -and $_.Status -eq 'Updated' }
+
+    return [PSCustomObject]@{
+        StoredProcedures = $storedProcedures
+        Views            = $views
+        Functions        = $functions
+    }
+}
