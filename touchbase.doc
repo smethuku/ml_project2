@@ -90,3 +90,56 @@ People Managers Only: Reflect on how your actions have strengthened team culture
 
 Employee Evaluation
 Answer
+
+-------------------------------------------------------------------------------------
+
+
+WHAT – What have you achieved?
+
+In the first half of 2025, I have made meaningful contributions across six major initiatives:
+	1.	Enterprise Data Warehouse – Snowflake:
+I collaborated closely with the GDS team to provision Snowflake infrastructure using Terraform—covering warehouses, users, roles, and Failover Groups. I led the setup, testing, demonstration, and documentation of Snowflake Failover Group configuration, marking our team’s first deployment of this type. Additionally, I built a Python-based monitoring framework that now supports 10 alerts across 4 Snowflake accounts and has been adopted internally for additional alerting use cases.
+	2.	SQL Server 2016 Remediation – CRIMS Upgrade:
+I contributed significantly to the SQL Server remediation initiative by leading the migration of replication publishers from SQL Server 2016 to 2022. This involved setting up and testing a complex double-hop replication topology. My efforts helped decommission legacy systems while maintaining seamless data synchronization.
+	3.	DWS – Database Refresh Project:
+I developed PowerShell functions to track the status of database restores and refresh linked servers, contributing to the automation of database refresh workflows for Dev and Stage environments. These functions are now being integrated into the DWS API and are expected to enable self-service refreshes by application teams.
+	4.	CRIMS – Cloud Migration and Data Replication Redesign:
+During a colleague’s sabbatical, I took ownership of database responsibilities for the CRIMS migration effort. I supported replication monitoring during the Stage DR test and resolved a major performance issue—reducing a 20-minute process to milliseconds through targeted query optimization. I continue to serve as the backup SME now that the primary lead has returned.
+	5.	Patching and Software Update – All Platforms:
+I built an email notification system using Python, designed to send standardized updates across the patching lifecycle (schedule, start, and completion). While patching automation is being developed by another team member, this notification module enhances clarity and consistency in communication during patch windows.
+	6.	Security Vulnerabilities:
+I actively participate in weekly vulnerability triage meetings and have remediated multiple findings. Highlights include resolving JDK-related vulnerabilities on database servers and working with the SolarWinds vendor to investigate and validate that a reported vulnerability was not exploitable in our environment.
+
+In the second half of 2025, I plan to:
+	•	Finalize pending Snowflake provisioning and extend monitoring coverage
+	•	Support enhancements to the DWS refresh process based on real-world feedback
+	•	Continue contributing to the CRIMS cloud migration as a backup lead
+	•	Evolve internal automation tooling and strengthen infrastructure security posture
+
+⸻
+
+HOW – How have you approached your work?
+
+Throughout these initiatives, I have consistently demonstrated:
+	•	Learns and Applies: Proactively acquired skills in Terraform and Python to deliver infrastructure-as-code solutions and automation frameworks. I explored new libraries and templating systems while developing internal tooling.
+	•	Solves Collaboratively: Worked across teams—including GDS, CRIMS, DWS, and external vendors—to drive solutions that balance performance, security, and operational stability.
+	•	Takes Accountability: Took full ownership of critical tasks, such as replication redesign, database refresh tooling, and patch notification workflows, even stepping into a lead role during a teammate’s absence.
+	•	Communication: Ensured alignment through status updates, documentation, demos, and stakeholder coordination, especially during sensitive phases like DR testing and software migrations.
+	•	Culture: Filled in critical roles when needed, supported team-wide efforts in security triage, and contributed to automation goals that benefit both the team and application partners.
+	•	Skills and Knowledge: Applied deep platform knowledge in SQL Server and Snowflake, and extended my scripting capabilities in PowerShell and Python to support modern database operations.
+
+What has kept me motivated is the opportunity to build reusable frameworks, contribute meaningfully to high-visibility projects, and continue growing my technical toolkit through hands-on innovation and problem-solving.
+
+⸻
+
+OUTCOME – What are the results of your efforts?
+
+My work has directly contributed to:
+	•	A more resilient Snowflake environment through automated provisioning and disaster recovery validation.
+	•	De-risked infrastructure by retiring legacy SQL Server versions and maintaining replication integrity during migration.
+	•	Improved operational efficiency through automation of database restore tracking and linked server refreshes.
+	•	Stronger platform stability by resolving critical performance issues and providing coverage during key resource gaps.
+	•	Clearer patching communications through templated notifications.
+	•	Reduced security risk by addressing vulnerabilities across key systems and validating third-party findings.
+
+Across all efforts, I’ve balanced execution and collaboration, enabling both team success and individual growth. I look forward to building on this momentum in the second half of the year.
