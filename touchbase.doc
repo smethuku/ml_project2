@@ -1,0 +1,92 @@
+
+	1. Enterprise Data Warehouse - Snowflake
+		Heavily collaborated with the GDS team in configuration and integration of snowflake warehouses, users, roles, Failover Groups using Terraform.
+		Snowflake Resiliency Setup: Setup, Test and Document Failover Group configuration using Terraform. 
+		
+		Attributes: 
+			Learns and Applies: Researched and learnt Terraform modules, Snowflake Technology while implementing this
+			
+		Snowflake Monitoring - Implemented and Enhanced Snowflake monitoring using Python. 
+		 
+	2. SQL 2016 Remediation
+		Contributed significantly in CRIMS Upgrade and Migrated existing SQL Server replication publishers from on 2016 to 2022
+	3. DWS - Database Refresh Project
+		Contributing to the integration of DB Refresh into DWS API.
+		
+	4. CRIMS - Cloud Migration and Data Replication Redesign
+		Performed DR Test on CRIMS Stage environment, supported existing replication setup, providing technical support for the CRIMS team to address performance issues.
+	5. Patching and Software Update - All Platforms : 
+		Built email notification system which uses standardized templates for notification's during various phases of the patching process. 
+		Learned various python libraries while implementing this notification
+	
+	6. Security Vulnerabilities
+		Resolving security vulnerabilities that are identified 
+		
+	7. Operational SRE 
+Collaborated with the team in Identifying operational tasks that can be automated and resolved them.
+
+
+
+----------------------------------------
+Touch Base on Progress and Alignment
+
+At mid-year, Talent Talks are an opportunity to reflect on your performance and align with your manager. This form leverages the W.H.O. performance framework, which is the What, How, and Outcome of employee performance, to outline your progress, celebrate achievements, address challenges, and ensure you’re on track for success.
+
+Step 1: Review the available Talent Talk Resources to watch two videos on the W.H.O. framework and use the Employee Worksheet to prepare for your mid-year Talent Talk conversation.
+
+Step 2: Discuss what you wrote in your Worksheet with your manager and ensure you are aligned.
+
+Step 3: Complete this Workday form and submit it so that your manager can add their comments.
+
+People Managers: When completing your own Talent Talk, please also include a response to the “People Managers Only” prompts.
+
+
+What: What have you achieved?
+Question
+What: What have you achieved?
+
+Summarize progress on deliverables and milestones you’ve achieved.
+
+Note any changes, shifts, or obstacles that have impacted your goals.
+
+Describe ways you have challenged yourself to develop new knowledge and skills.
+
+Outline next steps and your plan to ensure you are on track for the remainder of the year.
+
+People Managers Only: Describe ways you have supported your team in meeting key goals and the opportunities you’re creating for their growth and development.
+
+Employee Evaluation
+Answer  
+
+
+
+
+How: How have you approached your work?
+Question
+How: How have you approached your work?
+
+Describe the mindset and behaviors you used to approach your work and any areas where you could adjust. If your department uses “attributes,” leverage those in your reflection.
+
+Identify what has kept you motivated and engaged, and what will continue to energize and focus you on meeting evolving business needs.
+
+People Managers Only: Describe how you have fostered accountability and open communication within your team and highlight where you plan to continue growing as a leader.
+
+Employee Evaluation
+Answer
+
+
+
+Outcome: What are the results of your efforts?
+Question
+Outcome: What are the results of your efforts?
+
+Summarize how your work has contributed to the success of your team, department, and/or the firm.
+
+Describe how you’ve balanced both What you’ve accomplished and How you’ve approached your work to drive results.
+
+Highlight any improvements, efficiencies, or innovations you’ve contributed to and the impact they’ve had on your role or broader goals.
+
+People Managers Only: Reflect on how your actions have strengthened team culture, enabled high performance, and contributed to meaningful outcomes.
+
+Employee Evaluation
+Answer
